@@ -8,14 +8,16 @@ export default {
   },
   data() {
     return {
-      surahList: [],
-      filteredSurah: [],
+      surahList: [], // Daftar semua surah
+      filteredSurah: [], // Surah yang ditampilkan
+      searchQuery: "", // Query pencarian
+      searchResults: [], // Hasil pencarian surah
       isLoading: true,
       error: null,
-      searchQuery: "",
     };
   },
   methods: {
+    // Ambil data surah dari API
     async fetchSurahList() {
       this.isLoading = true;
       this.error = null;
@@ -34,47 +36,85 @@ export default {
         this.isLoading = false;
       }
     },
+
+    // Pindah ke halaman detail surah
     goToSurahDetails(id) {
       this.$router.push(`/surah/${id}`);
     },
+
+    // Fungsi untuk melakukan pencarian surah
     searchSurah() {
       if (this.searchQuery.trim() === "") {
-        this.filteredSurah = this.surahList;
+        this.searchResults = []; // Clear search results jika query kosong
       } else {
-        this.filteredSurah = this.surahList.filter(surah =>
-          surah.namaLatin.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          surah.arti.toLowerCase().includes(this.searchQuery.toLowerCase())
-        );
+        const normalizedQuery = this.searchQuery.toLowerCase().replace(/-/g, ''); // Normalisasi query, menghapus tanda "-"
+        this.searchResults = this.surahList.filter((surah) => {
+          const normalizedName = surah.namaLatin.toLowerCase().replace(/-/g, ''); // Normalisasi nama Latin surah, menghapus tanda "-"
+          const normalizedMeaning = surah.arti.toLowerCase().replace(/-/g, ''); // Normalisasi arti surah, menghapus tanda "-"
+          return normalizedName.includes(normalizedQuery) || normalizedMeaning.includes(normalizedQuery);
+        });
       }
+    },
+
+    // Ketika memilih surah dari hasil pencarian
+    selectSurah(surah) {
+      this.$router.push(`/surah/${surah.nomor}`);
+      this.searchQuery = ""; // Clear search query setelah memilih
+      this.searchResults = []; // Clear search results setelah memilih
     },
   },
   mounted() {
-    this.fetchSurahList();
+    this.fetchSurahList(); // Ambil data surah saat komponen dimuat
   },
 };
 </script>
 
-
 <template>
   <div>
+    <!-- Hero Section dengan Background -->
     <div
       class="hero relative h-screen flex items-center justify-center bg-cover bg-center"
-      style="background-image: url('/images/bg.jpg');"
+      style="background-image: url('/public/images/bg.jpg');"
     >
       <div class="hero-overlay absolute inset-0 bg-black opacity-50"></div>
       <div class="hero-content z-10 text-center text-white p-4 space-y-4" data-aos="fade-up" data-aos-duration="1000">
         <h1 class="text-5xl font-bold">Al-Qur'an Juz 1-30</h1>
-        <input 
-          type="text" 
-          v-model="searchQuery" 
-          placeholder="Cari Surah..." 
-          @input="searchSurah"
-          class="search-input px-6 py-3 text-lg rounded-full w-full max-w-md mx-auto bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
-          data-aos="fade-up" data-aos-delay="200"
-        />
+
+        <!-- Input Pencarian dengan Tombol Cari -->
+        <div class="relative w-full max-w-md mx-auto">
+          <input 
+            type="text" 
+            v-model="searchQuery" 
+            placeholder="Cari Surah..." 
+            @input="searchSurah"
+            class="search-input px-6 py-3 text-lg rounded-full w-full bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            data-aos="fade-up" data-aos-delay="200"
+          />
+          <button
+            @click="searchSurah"
+            class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-teal-600 text-white px-4 py-2 rounded-full focus:outline-none"
+          >
+            Cari
+          </button>
+
+          <!-- Dropdown Daftar Hasil Pencarian -->
+          <div v-if="searchResults.length" class="absolute left-0 right-0 bg-white shadow-lg mt-2 rounded-lg max-h-60 overflow-y-auto text-black">
+            <ul>
+              <li
+                v-for="result in searchResults"
+                :key="result.nomor"
+                @click="selectSurah(result)"
+                class="cursor-pointer px-4 py-2 hover:bg-teal-100"
+              >
+                {{ result.namaLatin }} ({{ result.arti }})
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
 
+    <!-- Daftar Surah -->
     <div class="container mx-auto p-4">
       <section class="mt-8">
         <p v-if="isLoading" class="text-center text-xl">Loading...</p>
@@ -124,10 +164,6 @@ export default {
   </div>
 </template>
 
-
-
-
-
 <style scoped>
 .hero-overlay {
   position: absolute;
@@ -159,40 +195,6 @@ export default {
 
 .surah-card:hover {
   transform: scale(1.05);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-}
-
-.surah-card h3 {
-  font-size: 1.125rem; 
-  font-weight: 600;
-  color: #00796b;
-}
-
-.surah-card p {
-  margin-top: 0.25rem;
-}
-
-.surah-card p.text-sm {
-  font-size: 0.875rem;
-  color: #5f6368;
-}
-
-.surah-card p.text-xs {
-  font-size: 0.75rem;
-  color: #9e9e9e;
-}
-
-@media (max-width: 768px) {
-  h1 {
-    font-size: 3rem;
-  }
-}
-
-@media (max-width: 480px) {
-  h1 {
-    font-size: 2rem;
-  }
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
 }
 </style>
-
-
