@@ -22,10 +22,10 @@
 
       <!-- Social Media Icons -->
       <div class="flex space-x-4">
-        <a href="https://instagram.com" target="_blank" class="text-white hover:text-teal-200">
+        <a href="https://instagram.com/djaroephon.1746" target="_blank" class="text-white hover:text-teal-200">
           <i class="fab fa-instagram fa-2x"></i>
         </a>
-        <a href="https://github.com" target="_blank" class="text-white hover:text-teal-200">
+        <a href="https://github.com/djaroephon" target="_blank" class="text-white hover:text-teal-200">
           <i class="fab fa-github fa-2x"></i>
         </a>
       </div>
