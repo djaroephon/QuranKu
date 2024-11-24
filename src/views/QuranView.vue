@@ -69,7 +69,7 @@ export default {
   <div>
     <div
       class="hero relative h-screen flex items-center justify-center bg-cover bg-center"
-      style="background-image: url('/public/images/bg.jpg');"
+      style="background-image: url('/images/bg.jpg');"
     >
       <div class="hero-overlay absolute inset-0 bg-black opacity-50"></div>
       <div class="hero-content z-10 text-center text-white p-4 space-y-4" data-aos="fade-up" data-aos-duration="1000">
