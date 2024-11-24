@@ -8,16 +8,15 @@ export default {
   },
   data() {
     return {
-      surahList: [], // Daftar semua surah
-      filteredSurah: [], // Surah yang ditampilkan
-      searchQuery: "", // Query pencarian
-      searchResults: [], // Hasil pencarian surah
+      surahList: [], 
+      filteredSurah: [], 
+      searchQuery: "", 
+      searchResults: [], 
       isLoading: true,
       error: null,
     };
   },
   methods: {
-    // Ambil data surah dari API
     async fetchSurahList() {
       this.isLoading = true;
       this.error = null;
@@ -37,41 +36,37 @@ export default {
       }
     },
 
-    // Pindah ke halaman detail surah
     goToSurahDetails(id) {
       this.$router.push(`/surah/${id}`);
     },
 
-    // Fungsi untuk melakukan pencarian surah
     searchSurah() {
       if (this.searchQuery.trim() === "") {
-        this.searchResults = []; // Clear search results jika query kosong
+        this.searchResults = [];
       } else {
-        const normalizedQuery = this.searchQuery.toLowerCase().replace(/-/g, ''); // Normalisasi query, menghapus tanda "-"
+        const normalizedQuery = this.searchQuery.toLowerCase().replace(/-/g, '');
         this.searchResults = this.surahList.filter((surah) => {
-          const normalizedName = surah.namaLatin.toLowerCase().replace(/-/g, ''); // Normalisasi nama Latin surah, menghapus tanda "-"
-          const normalizedMeaning = surah.arti.toLowerCase().replace(/-/g, ''); // Normalisasi arti surah, menghapus tanda "-"
+          const normalizedName = surah.namaLatin.toLowerCase().replace(/-/g, ''); 
+          const normalizedMeaning = surah.arti.toLowerCase().replace(/-/g, ''); 
           return normalizedName.includes(normalizedQuery) || normalizedMeaning.includes(normalizedQuery);
         });
       }
     },
 
-    // Ketika memilih surah dari hasil pencarian
     selectSurah(surah) {
       this.$router.push(`/surah/${surah.nomor}`);
-      this.searchQuery = ""; // Clear search query setelah memilih
-      this.searchResults = []; // Clear search results setelah memilih
+      this.searchQuery = ""; 
+      this.searchResults = []; 
     },
   },
   mounted() {
-    this.fetchSurahList(); // Ambil data surah saat komponen dimuat
+    this.fetchSurahList(); 
   },
 };
 </script>
 
 <template>
   <div>
-    <!-- Hero Section dengan Background -->
     <div
       class="hero relative h-screen flex items-center justify-center bg-cover bg-center"
       style="background-image: url('/public/images/bg.jpg');"
@@ -80,7 +75,6 @@ export default {
       <div class="hero-content z-10 text-center text-white p-4 space-y-4" data-aos="fade-up" data-aos-duration="1000">
         <h1 class="text-5xl font-bold">Al-Qur'an Juz 1-30</h1>
 
-        <!-- Input Pencarian dengan Tombol Cari -->
         <div class="relative w-full max-w-md mx-auto">
           <input 
             type="text" 
@@ -97,7 +91,6 @@ export default {
             Cari
           </button>
 
-          <!-- Dropdown Daftar Hasil Pencarian -->
           <div v-if="searchResults.length" class="absolute left-0 right-0 bg-white shadow-lg mt-2 rounded-lg max-h-60 overflow-y-auto text-black">
             <ul>
               <li
