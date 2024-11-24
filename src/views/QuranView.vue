@@ -8,10 +8,10 @@ export default {
   },
   data() {
     return {
-      surahList: [], 
-      filteredSurah: [], 
-      searchQuery: "", 
-      searchResults: [], 
+      surahList: [],
+      filteredSurah: [],
+      searchQuery: "",
+      searchResults: [],
       isLoading: true,
       error: null,
     };
@@ -29,38 +29,48 @@ export default {
           throw new Error("Data surah tidak ditemukan.");
         }
       } catch (error) {
-        console.error("Error fetching surah list:", error.message);
         this.error = "Gagal memuat daftar surah. Silakan coba lagi.";
       } finally {
         this.isLoading = false;
       }
     },
-
     goToSurahDetails(id) {
       this.$router.push(`/surah/${id}`);
     },
-
     searchSurah() {
       if (this.searchQuery.trim() === "") {
         this.searchResults = [];
       } else {
-        const normalizedQuery = this.searchQuery.toLowerCase().replace(/-/g, '');
+        const normalizedQuery = this.searchQuery
+          .toLowerCase()
+          .replace(/[\s-]+/g, "")
+          .trim();
         this.searchResults = this.surahList.filter((surah) => {
-          const normalizedName = surah.namaLatin.toLowerCase().replace(/-/g, ''); 
-          const normalizedMeaning = surah.arti.toLowerCase().replace(/-/g, ''); 
-          return normalizedName.includes(normalizedQuery) || normalizedMeaning.includes(normalizedQuery);
+          const normalizedName = surah.namaLatin
+            .toLowerCase()
+            .replace(/[\s-]+/g, "")
+            .trim();
+          const normalizedMeaning = surah.arti
+            .toLowerCase()
+            .replace(/[\s-]+/g, "")
+            .trim();
+          return (
+            normalizedName.startsWith(normalizedQuery) ||
+            normalizedMeaning.startsWith(normalizedQuery) ||
+            normalizedName.includes(normalizedQuery) ||
+            normalizedMeaning.includes(normalizedQuery)
+          );
         });
       }
     },
-
     selectSurah(surah) {
       this.$router.push(`/surah/${surah.nomor}`);
-      this.searchQuery = ""; 
-      this.searchResults = []; 
+      this.searchQuery = "";
+      this.searchResults = [];
     },
   },
   mounted() {
-    this.fetchSurahList(); 
+    this.fetchSurahList();
   },
 };
 </script>
@@ -74,7 +84,6 @@ export default {
       <div class="hero-overlay absolute inset-0 bg-black opacity-50"></div>
       <div class="hero-content z-10 text-center text-white p-4 space-y-4" data-aos="fade-up" data-aos-duration="1000">
         <h1 class="text-5xl font-bold">Al-Qur'an Juz 1-30</h1>
-
         <div class="relative w-full max-w-md mx-auto">
           <input 
             type="text" 
@@ -90,7 +99,6 @@ export default {
           >
             Cari
           </button>
-
           <div v-if="searchResults.length" class="absolute left-0 right-0 bg-white shadow-lg mt-2 rounded-lg max-h-60 overflow-y-auto text-black">
             <ul>
               <li
@@ -106,13 +114,10 @@ export default {
         </div>
       </div>
     </div>
-
-    <!-- Daftar Surah -->
     <div class="container mx-auto p-4">
       <section class="mt-8">
         <p v-if="isLoading" class="text-center text-xl">Loading...</p>
         <p v-else-if="error" class="text-center text-xl text-red-600">{{ error }}</p>
-
         <div v-else class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           <div
             v-for="surah in filteredSurah"
@@ -140,7 +145,6 @@ export default {
                 {{ surah.nomor }}
               </span>
             </div>
-
             <h3 class="text-lg font-semibold text-teal-600">
               {{ surah.namaLatin }}
             </h3>
