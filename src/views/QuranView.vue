@@ -25,9 +25,10 @@ export default {
         if (response.data && response.data.data) {
           this.surahList = response.data.data;
 
+          // Modify Surah Al-Baqarah (ID: 2) meaning if exists
           const surahAlBaqarah = this.surahList.find(surah => surah.nomor === 2);
           if (surahAlBaqarah) {
-            surahAlBaqarah.arti = "Sapi betina";  
+            surahAlBaqarah.arti = "Sapi betina";  // Update meaning
           }
 
           this.filteredSurah = this.surahList;
@@ -51,9 +52,7 @@ export default {
           .toLowerCase()
           .replace(/[\s-]+/g, "")
           .trim();
-
-
-
+        
         this.searchResults = this.surahList.filter((surah) => {
           const normalizedName = surah.namaLatin
             .toLowerCase()
@@ -64,12 +63,7 @@ export default {
             .replace(/[\s-]+/g, "")
             .trim();
 
-        
           return (
-
-          return (
-            normalizedName.startsWith(normalizedQuery) ||
-            normalizedMeaning.startsWith(normalizedQuery) ||
             normalizedName.includes(normalizedQuery) ||
             normalizedMeaning.includes(normalizedQuery)
           );
