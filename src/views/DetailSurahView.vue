@@ -40,6 +40,7 @@ export default {
     return {
       surahDetails: null,
       isLoading: true,
+      error: null,
     };
   },
   methods: {
@@ -47,29 +48,36 @@ export default {
       const id = this.$route.params.id;
 
       if (!id) {
-        console.error("ID surah tidak valid.");
+        this.error = "ID surah tidak valid.";
+        this.isLoading = false;
         return;
       }
 
       try {
         const response = await axios.get(`https://equran.id/api/v2/surat/${id}`);
 
-        console.log(response.data);
-
         if (response.data && response.data.data) {
           this.surahDetails = response.data.data;
 
+          // Special handling for Surah Al-Baqarah (ID 2)
+          if (this.surahDetails.nomor === 2) {
+            this.surahDetails.arti = "Sapi Betina"; // Fix the meaning manually if it's Al-Baqarah
+          }
+
+          // If 'ayat' is not available, initialize as an empty array
           if (!this.surahDetails.ayat) {
             this.surahDetails.ayat = [];
           }
 
+          this.error = null; // Reset error if data is fetched successfully
         } else {
-          console.error("Data surah tidak ditemukan.");
+          this.error = "Data surah tidak ditemukan.";
         }
 
         this.isLoading = false;
       } catch (error) {
         console.error("Error fetching surah details:", error);
+        this.error = "Terjadi kesalahan saat memuat detail surah.";
         this.isLoading = false;
       }
     },

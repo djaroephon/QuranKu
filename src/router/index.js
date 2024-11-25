@@ -3,6 +3,7 @@ import QuranView from '@/views/QuranView.vue'
 import SurahDetail from '@/views/DetailSurahView.vue'
 import Solat from '@/views/SolatView.vue'
 import Hadist from '@/views/HadistView.vue'
+import RamadhanView from '@/views/RamadhanView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,7 +19,7 @@ const router = createRouter({
       component: SurahDetail,
     },
     {
-      path: '/solat',
+      path: '/sholat',
       name: 'Solat',
       component: Solat,
     },
@@ -26,6 +27,11 @@ const router = createRouter({
       path: '/hadist',
       name: 'Hadist',
       component: Hadist,
+    },
+    {
+      path: "/ramadhan",
+      name: "RamadhanView",
+      component: RamadhanView,
     },
   ],
 })

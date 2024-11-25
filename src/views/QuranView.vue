@@ -10,9 +10,10 @@ export default {
     return {
       surahList: [],
       filteredSurah: [],
+      searchQuery: "",
+      searchResults: [],
       isLoading: true,
       error: null,
-      searchQuery: "",
     };
   },
   methods: {
@@ -23,12 +24,18 @@ export default {
         const response = await axios.get("https://equran.id/api/v2/surat");
         if (response.data && response.data.data) {
           this.surahList = response.data.data;
+
+          // Optionally, modify the meaning of Surah Al-Baqarah (ID: 2)
+          const surahAlBaqarah = this.surahList.find(surah => surah.nomor === 2);
+          if (surahAlBaqarah) {
+            surahAlBaqarah.arti = "Sapi betina";  // Update the meaning
+          }
+
           this.filteredSurah = this.surahList;
         } else {
           throw new Error("Data surah tidak ditemukan.");
         }
       } catch (error) {
-        console.error("Error fetching surah list:", error.message);
         this.error = "Gagal memuat daftar surah. Silakan coba lagi.";
       } finally {
         this.isLoading = false;
@@ -39,13 +46,34 @@ export default {
     },
     searchSurah() {
       if (this.searchQuery.trim() === "") {
-        this.filteredSurah = this.surahList;
+        this.searchResults = [];
       } else {
-        this.filteredSurah = this.surahList.filter(surah =>
-          surah.namaLatin.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          surah.arti.toLowerCase().includes(this.searchQuery.toLowerCase())
-        );
+        const normalizedQuery = this.searchQuery
+          .toLowerCase()
+          .replace(/[\s-]+/g, "")
+          .trim();
+
+        this.searchResults = this.surahList.filter((surah) => {
+          const normalizedName = surah.namaLatin
+            .toLowerCase()
+            .replace(/[\s-]+/g, "")
+            .trim();
+          const normalizedMeaning = surah.arti
+            .toLowerCase()
+            .replace(/[\s-]+/g, "")
+            .trim();
+          // Allow matches anywhere within the name or meaning
+          return (
+            normalizedName.includes(normalizedQuery) ||
+            normalizedMeaning.includes(normalizedQuery)
+          );
+        });
       }
+    },
+    selectSurah(surah) {
+      this.$router.push(`/surah/${surah.nomor}`);
+      this.searchQuery = "";
+      this.searchResults = [];
     },
   },
   mounted() {
@@ -54,32 +82,49 @@ export default {
 };
 </script>
 
-
 <template>
   <div>
     <div
       class="hero relative h-screen flex items-center justify-center bg-cover bg-center"
-      style="background-image: url('/public/images/5110786.jpg');"
+      style="background-image: url('/images/bg.jpg');"
     >
       <div class="hero-overlay absolute inset-0 bg-black opacity-50"></div>
       <div class="hero-content z-10 text-center text-white p-4 space-y-4" data-aos="fade-up" data-aos-duration="1000">
         <h1 class="text-5xl font-bold">Al-Qur'an Juz 1-30</h1>
-        <input 
-          type="text" 
-          v-model="searchQuery" 
-          placeholder="Cari Surah..." 
-          @input="searchSurah"
-          class="search-input px-6 py-3 text-lg rounded-full w-full max-w-md mx-auto bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
-          data-aos="fade-up" data-aos-delay="200"
-        />
+        <div class="relative w-full max-w-md mx-auto">
+          <input 
+            type="text" 
+            v-model="searchQuery" 
+            placeholder="Cari Surah..." 
+            @input="searchSurah"
+            class="search-input px-6 py-3 text-lg rounded-full w-full bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            data-aos="fade-up" data-aos-delay="200"
+          />
+          <button
+            @click="searchSurah"
+            class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-teal-600 text-white px-4 py-2 rounded-full focus:outline-none"
+          >
+            Cari
+          </button>
+          <div v-if="searchResults.length" class="absolute left-0 right-0 bg-white shadow-lg mt-2 rounded-lg max-h-60 overflow-y-auto text-black">
+            <ul>
+              <li
+                v-for="result in searchResults"
+                :key="result.nomor"
+                @click="selectSurah(result)"
+                class="cursor-pointer px-4 py-2 hover:bg-teal-100"
+              >
+                {{ result.namaLatin }} ({{ result.arti }})
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
-
     <div class="container mx-auto p-4">
       <section class="mt-8">
         <p v-if="isLoading" class="text-center text-xl">Loading...</p>
         <p v-else-if="error" class="text-center text-xl text-red-600">{{ error }}</p>
-
         <div v-else class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           <div
             v-for="surah in filteredSurah"
@@ -107,7 +152,6 @@ export default {
                 {{ surah.nomor }}
               </span>
             </div>
-
             <h3 class="text-lg font-semibold text-teal-600">
               {{ surah.namaLatin }}
             </h3>
@@ -123,10 +167,6 @@ export default {
     </div>
   </div>
 </template>
-
-
-
-
 
 <style scoped>
 .hero-overlay {
@@ -159,40 +199,6 @@ export default {
 
 .surah-card:hover {
   transform: scale(1.05);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-}
-
-.surah-card h3 {
-  font-size: 1.125rem; 
-  font-weight: 600;
-  color: #00796b;
-}
-
-.surah-card p {
-  margin-top: 0.25rem;
-}
-
-.surah-card p.text-sm {
-  font-size: 0.875rem;
-  color: #5f6368;
-}
-
-.surah-card p.text-xs {
-  font-size: 0.75rem;
-  color: #9e9e9e;
-}
-
-@media (max-width: 768px) {
-  h1 {
-    font-size: 3rem;
-  }
-}
-
-@media (max-width: 480px) {
-  h1 {
-    font-size: 2rem;
-  }
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
 }
 </style>
-
-
