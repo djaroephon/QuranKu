@@ -52,7 +52,10 @@ export default {
           .toLowerCase()
           .replace(/[\s-]+/g, "")
           .trim();
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2e6b36c31a6066f93817902283e4b2fe8e1bc211
         this.searchResults = this.surahList.filter((surah) => {
           const normalizedName = surah.namaLatin
             .toLowerCase()
@@ -62,8 +65,14 @@ export default {
             .toLowerCase()
             .replace(/[\s-]+/g, "")
             .trim();
+<<<<<<< HEAD
           // Allow matches anywhere within the name or meaning
           return (
+=======
+          return (
+            normalizedName.startsWith(normalizedQuery) ||
+            normalizedMeaning.startsWith(normalizedQuery) ||
+>>>>>>> 2e6b36c31a6066f93817902283e4b2fe8e1bc211
             normalizedName.includes(normalizedQuery) ||
             normalizedMeaning.includes(normalizedQuery)
           );
