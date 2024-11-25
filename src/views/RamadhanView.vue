@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- Hero Section -->
+  
     <section class="hero min-h-screen flex items-center justify-center text-center" :style="backgroundStyle">
       <div class="text-white space-y-8 px-4">
         <h1 class="text-6xl font-extrabold tracking-tight leading-tight drop-shadow-md">
@@ -9,7 +9,7 @@
         <p class="text-xl italic drop-shadow-md">
           Sambut bulan penuh berkah dengan hati dan jiwa yang bersih
         </p>
-        <!-- Countdown displayed here -->
+       
         <div v-if="!isRamadhan" class="countdown bg-yellow-400 text-gray-800 font-bold text-2xl px-8 py-4 rounded-full shadow-lg animate-bounce inline-block">
           {{ countdown }}
         </div>
@@ -19,17 +19,17 @@
       </div>
     </section>
 
-    <!-- Konten Ramadhan -->
+
     <section v-if="isRamadhan" class="content bg-gradient-to-b from-gray-100 to-gray-200 py-16">
       <div class="container mx-auto px-6 lg:px-20">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-          <!-- Jadwal Shalat -->
+
           <div class="card">
             <h2 class="card-title">Jadwal Shalat</h2>
             <PrayerSchedule />
           </div>
 
-          <!-- To-Do List Ramadhan -->
+  >
           <div class="card">
             <h2 class="card-title">To-Do List Ramadhan</h2>
             <div>
@@ -59,7 +59,6 @@
             </div>
           </div>
 
-          <!-- Tips Ramadhan -->
           <div class="card">
             <h2 class="card-title">Tips Ramadhan</h2>
             <ul class="list-disc list-inside space-y-2">
@@ -96,12 +95,11 @@ export default {
   },
   methods: {
     startCountdown() {
-      // Ambil tahun sekarang untuk menentukan tanggal Ramadhan
       const currentYear = new Date().getFullYear();
-      // Tentukan tanggal awal Ramadhan (misalnya, 10 Maret 2024)
+     
       const ramadhanDate = new Date(`${currentYear}-03-10T00:00:00`);
 
-      // Memulai timer countdown
+    
       const timer = setInterval(() => {
         const now = new Date();
         const timeLeft = ramadhanDate - now;
@@ -109,7 +107,7 @@ export default {
         if (timeLeft <= 0) {
           clearInterval(timer);
           this.countdown = "Ramadhan telah tiba!";
-          this.isRamadhan = true; // Menandakan bahwa Ramadhan telah tiba
+          this.isRamadhan = true; 
         } else {
           const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
           const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
@@ -155,7 +153,7 @@ export default {
   },
 
   mounted() {
-    this.startCountdown(); // Mulai countdown pada saat halaman dimuat
+    this.startCountdown();
     this.loadTasks();
   },
 };
@@ -195,7 +193,7 @@ export default {
   color: #1f2937;
 }
 
-/* Responsive Grid */
+
 @media (min-width: 768px) {
   .grid-cols-1 {
     grid-template-columns: repeat(2, 1fr);
@@ -207,7 +205,7 @@ export default {
   }
 }
 
-/* Animation */
+
 @keyframes bounce {
   0%, 100% {
     transform: translateY(0);
@@ -217,7 +215,7 @@ export default {
   }
 }
 
-/* Button hover effect */
+/* btn pas di hover */
 button {
   transition: transform 0.2s ease, color 0.2s ease;
 }
