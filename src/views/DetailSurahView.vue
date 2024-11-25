@@ -18,8 +18,8 @@
         <div v-for="ayah in surahDetails.ayat" :key="ayah.nomorAyat" class="ayah-item bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-2xl">
           <p class="ayah-number text-xl font-semibold text-gray-700 mb-4">Ayat {{ ayah.nomorAyat }}:</p>
           <div class="ayah-text text-lg text-gray-800">
-            <span class="arabic-text block text-2xl text-teal-600 font-serif mb-2">{{ ayah.teksArab }}</span>
-            <span class="latin-text block text-md text-blue-600 mb-2">{{ ayah.teksLatin }}</span>
+            <span class="arabic-text block text-2xl text-teal-600 font-serif mb-2 text-right">{{ ayah.teksArab }}</span>
+            <span class="latin-text block text-md text-blue-600 mb-2 text-right" >{{ ayah.teksLatin }}</span>
             <span class="indonesia-text block text-md text-gray-600">Artinya: </span>
             <span class="indonesia-text block text-md text-gray-600">{{ ayah.teksIndonesia }}</span>
           </div>
