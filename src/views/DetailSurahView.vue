@@ -59,17 +59,17 @@ export default {
         if (response.data && response.data.data) {
           this.surahDetails = response.data.data;
 
-          // Special handling for Surah Al-Baqarah (ID 2)
+          
           if (this.surahDetails.nomor === 2) {
-            this.surahDetails.arti = "Sapi Betina"; // Fix the meaning manually if it's Al-Baqarah
+            this.surahDetails.arti = "Sapi Betina"; 
           }
 
-          // If 'ayat' is not available, initialize as an empty array
+        
           if (!this.surahDetails.ayat) {
             this.surahDetails.ayat = [];
           }
 
-          this.error = null; // Reset error if data is fetched successfully
+          this.error = null;
         } else {
           this.error = "Data surah tidak ditemukan.";
         }
