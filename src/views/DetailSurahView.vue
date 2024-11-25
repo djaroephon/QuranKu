@@ -20,6 +20,7 @@
           <div class="ayah-text text-lg text-gray-800">
             <span class="arabic-text block text-2xl text-teal-600 font-serif mb-2">{{ ayah.teksArab }}</span>
             <span class="latin-text block text-md text-blue-600 mb-2">{{ ayah.teksLatin }}</span>
+            <span class="indonesia-text block text-md text-gray-600">Artinya: </span>
             <span class="indonesia-text block text-md text-gray-600">{{ ayah.teksIndonesia }}</span>
           </div>
         </div>
@@ -59,17 +60,17 @@ export default {
         if (response.data && response.data.data) {
           this.surahDetails = response.data.data;
 
-          
+          // Special handling for Surah Al-Baqarah (ID 2)
           if (this.surahDetails.nomor === 2) {
-            this.surahDetails.arti = "Sapi Betina"; 
+            this.surahDetails.arti = "Sapi Betina"; // Fix the meaning manually if it's Al-Baqarah
           }
 
-        
+          // If 'ayat' is not available, initialize as an empty array
           if (!this.surahDetails.ayat) {
             this.surahDetails.ayat = [];
           }
 
-          this.error = null;
+          this.error = null; // Reset error if data is fetched successfully
         } else {
           this.error = "Data surah tidak ditemukan.";
         }
@@ -183,7 +184,7 @@ export default {
   display: block;
   font-size: 16px;
   margin: 5px 0;
-  color: #8e8e8e;
+  color: #6b6b6b;
 }
 
 .no-ayat {
