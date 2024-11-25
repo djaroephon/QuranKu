@@ -3,7 +3,6 @@
       <div v-if="isLoading" class="text-center">Loading...</div>
       <div v-else-if="error" class="text-center text-red-500">{{ error }}</div>
       <ul v-else>
-        <!-- Filter out Firstthird and Lastthird from the prayer list -->
         <li v-for="(time, prayer) in filteredPrayerTimes" :key="prayer" class="flex justify-between py-2">
           <span class="capitalize">{{ prayer }}</span>
           <span>{{ time }}</span>
@@ -24,11 +23,10 @@
       };
     },
     computed: {
-      // Computed property to filter out 'Firstthird' and 'Lastthird'
       filteredPrayerTimes() {
-        const filteredTimes = { ...this.prayerTimes }; // Clone the prayerTimes object
-        delete filteredTimes.Firstthird; // Remove 'Firstthird'
-        delete filteredTimes.Lastthird; // Remove 'Lastthird'
+        const filteredTimes = { ...this.prayerTimes }; 
+        delete filteredTimes.Firstthird; 
+        delete filteredTimes.Lastthird; 
         return filteredTimes;
       },
     },
