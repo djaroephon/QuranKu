@@ -3,7 +3,7 @@
       <div class="container mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 px-4 md:px-8">
         <!-- Copyright -->
         <p class="text-sm text-center md:text-left font-semibold text-lg hover:text-teal-200 transition-all duration-300">
-          &copy; 2024 Djaroephon | Universitas Ubudiyah Indonesia
+          &copy; 2025 Djaroephon | Universitas Ubudiyah Indonesia
         </p>
   
         <!-- Social Media Links -->
