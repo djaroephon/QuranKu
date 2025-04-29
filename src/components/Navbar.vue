@@ -6,6 +6,7 @@
   >
     <div class="container mx-auto flex justify-between items-center">
       <img
+
         src="/public/images/logo.png"
         alt="Logo"
         class="h-12 w-auto lg:block hidden"
